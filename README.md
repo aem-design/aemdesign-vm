@@ -1,4 +1,4 @@
-#AEM Design - VM Kickstarter
+# AEM Design - VM Kickstarter
 
 [![build_status](https://travis-ci.org/aem-design/aemdesign-vm.svg?branch=master)](https://travis-ci.org/aem-design/aemdesign-vm) 
 [![github license](https://img.shields.io/github/license/aem-design/aemdesign-vm)](https://github.com/aem-design/aemdesign-vm) 
@@ -12,7 +12,7 @@
 
 This folder contains all of the VM Kickstarter scripts that will be used form creating VM.
 
-##BuildLocal Dev Process Overview
+## BuildLocal Dev Process Overview
 
 
 1. Setup Variables
@@ -42,7 +42,7 @@ This folder contains all of the VM Kickstarter scripts that will be used form cr
     * verify VM lan has been updated
     * optional build docker containers
 
-##Getting Started
+## Getting Started
 
 
 1. clone repo
@@ -99,20 +99,20 @@ mvn verify -PverifyTemplate -Dpacker.var-file=settings/variables-online-dev1.jso
 mvn verify -PverifyTemplate -Dpacker.var-file=settings/variables-online-localdev.json -Dpacker.template=template-rhel-build-virtualbox.json
 ```
 
-##DEV Kickstarter Setup
+## DEV Kickstarter Setup
 
 
 [Kickstart Options](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Installation_Guide/sect-kickstart-syntax.html)
 
-###Vmware Fusion
+### Vmware Fusion
 
 
 
-###Template Settings
+### Template Settings
 
 "headless": false,
 
-###Prerequisites
+### Prerequisites
 
 
 * Install ```Intel x86 Emulator Accelerator (HAXM)```
@@ -145,7 +145,7 @@ To uninstall Intel HAXM, open a terminal window and execute this command:
 sudo /System/Library/Extensions/intelhaxm.kext/Contents/Resources/uninstall.sh
 ```
 
-##Errors
+## Errors
 
 When you get errors check here
 
@@ -161,7 +161,7 @@ In terminal:
 https://software.intel.com/en-us/android/articles/installation-instructions-for-intel-hardware-accelerated-execution-manager-mac-os-x
 
 
-##Folders & Files
+## Folders & Files
 
 
 * keys - private keys
@@ -171,7 +171,7 @@ https://software.intel.com/en-us/android/articles/installation-instructions-for-
 * settings - additional setting for diffrent modes
 * template-rhel.json - Packer template for RHEL build
 
-##Hot to generate new SHA1 hash of a file
+## Hot to generate new SHA1 hash of a file
 
 When you change ISO files you need to specify the checksum to generate a new one run this command
 
@@ -180,7 +180,7 @@ openssl sha1 path/to/file
 ```
 
 
-##Kickstarter File
+## Kickstarter File
 
 create encrypted password for kickstarter file
 ```bash
@@ -193,7 +193,7 @@ or
 echo "password here" | openssl dgst -sha512
 ```
 
-##Monitor Headless VM Creation
+## Monitor Headless VM Creation
 
 
 Default VRDP port is 5901, while build is running you can watch the process by use any RDP tool, ex [CoRD](http://cord.sourceforge.net/), by connecting to ```127.0.0.1:5901```.
