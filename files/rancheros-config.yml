@@ -1,0 +1,68 @@
+#cloud-config
+ssh_authorized_keys:
+  - ssh-rsa ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCywTW6S5qYxLcCERgBUXxCqPh072XJoVAbdckBDxCIFvxiyJS+latVCCsRVIb4J6x0WYsEDqj+Hb01+rcdX4jvKHjZykxKEB94Zg0v95wq9OfSYuc8NGDBjQSKqbDiLIg1NKYXHx7Lzng2td+Mg5aNiaQsQGAiR0Sq3rUcK6mO/VaHqdp8DWeUHpfXBotv6AlD4+TOaL2/pvV/gckwDx6zE5ssPo9OAWjMxUr8faMdB7xuYorna0o1zPU6KhtVrrGRXAliEwMPXFdlAbwFAN5YV/YUntX7/0AKhfkoz1ZAQA9fA8Vzs6TJNEvfYHUguhHuzFJA9tZ7vZLKy0tlC8zB6ZDfUlHumOn6a6SrKLDBJ6cLuiWGiZMZxpYZRp82Ab7v3G8wSmpdQPl/Z1sucAE9WTwL7w167pZXY6ikJ3mRKLMXeaIKtfRLV5fHrmchYabPyzixERhAgdXkxQ3jNyuplUzmUiLjSLSUUGgQf2MYde0WO59ZiLBwA64xDl3x9T1U0G4398cB9akw8cyRvi7o98guhxUXf26KYRwlVjqLRByEjmDSohpEYVz5PxZWvfNgXmWqEbec6wGMtWtqll+XioJ8klgLwDvjuKJvOHb5UnMFj7GlWGSqfs9ysiYemQh3nP8y1xHv1HjvhE6Y9CbUcppmpJiJbTQE3AumfqTK+Q== aemdesign
+  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCxOhllf5afxD+PrYQvCnCUKNaGGllysAcT0BxTwgKHoFb5P4kAM1Ce4yr6opogYg0wbReDmHmox1qZMiTOphH9dxzOnaHPxjGwbEA6dL78MxqOaFV8KQkWeEb1HntM+3F17wpZsdwaTHOTNwdg6z6xASi+19zi6vb7JAdjB3wMczBVlvStZ7/YlOTaRcn3hI1gW6GnWdqAgwcNNHIndz8NG0V4y94n661hVrhtqJF06JGSjQVk4UQPgQ7bVgDQuZeL6MoyKmC60aXFHcdQvAysPwro4SClECeCvKW9vTDupPUmt32Ob9wXwIBBJ55rMcoVbVK1KJ22vOXIktoQHw9J max.barrass@gmail.com
+write_files:
+  - path: /var/lib/rancher/conf/cloud-config.yml
+    permissions: "0644"
+    owner: root
+    content: |
+      #cloud-config
+      ssh_authorized_keys:
+        - ssh-rsa ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCywTW6S5qYxLcCERgBUXxCqPh072XJoVAbdckBDxCIFvxiyJS+latVCCsRVIb4J6x0WYsEDqj+Hb01+rcdX4jvKHjZykxKEB94Zg0v95wq9OfSYuc8NGDBjQSKqbDiLIg1NKYXHx7Lzng2td+Mg5aNiaQsQGAiR0Sq3rUcK6mO/VaHqdp8DWeUHpfXBotv6AlD4+TOaL2/pvV/gckwDx6zE5ssPo9OAWjMxUr8faMdB7xuYorna0o1zPU6KhtVrrGRXAliEwMPXFdlAbwFAN5YV/YUntX7/0AKhfkoz1ZAQA9fA8Vzs6TJNEvfYHUguhHuzFJA9tZ7vZLKy0tlC8zB6ZDfUlHumOn6a6SrKLDBJ6cLuiWGiZMZxpYZRp82Ab7v3G8wSmpdQPl/Z1sucAE9WTwL7w167pZXY6ikJ3mRKLMXeaIKtfRLV5fHrmchYabPyzixERhAgdXkxQ3jNyuplUzmUiLjSLSUUGgQf2MYde0WO59ZiLBwA64xDl3x9T1U0G4398cB9akw8cyRvi7o98guhxUXf26KYRwlVjqLRByEjmDSohpEYVz5PxZWvfNgXmWqEbec6wGMtWtqll+XioJ8klgLwDvjuKJvOHb5UnMFj7GlWGSqfs9ysiYemQh3nP8y1xHv1HjvhE6Y9CbUcppmpJiJbTQE3AumfqTK+Q== aemdesign
+        - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCxOhllf5afxD+PrYQvCnCUKNaGGllysAcT0BxTwgKHoFb5P4kAM1Ce4yr6opogYg0wbReDmHmox1qZMiTOphH9dxzOnaHPxjGwbEA6dL78MxqOaFV8KQkWeEb1HntM+3F17wpZsdwaTHOTNwdg6z6xASi+19zi6vb7JAdjB3wMczBVlvStZ7/YlOTaRcn3hI1gW6GnWdqAgwcNNHIndz8NG0V4y94n661hVrhtqJF06JGSjQVk4UQPgQ7bVgDQuZeL6MoyKmC60aXFHcdQvAysPwro4SClECeCvKW9vTDupPUmt32Ob9wXwIBBJ55rMcoVbVK1KJ22vOXIktoQHw9J max.barrass@gmail.com
+      rancher:
+        state:
+          dev: LABEL=RANCHER_STATE
+        services_include:
+          ubuntu-console: true
+        network:
+          dns:
+            override: true
+            nameservers:
+              - 8.8.8.8
+              - 8.8.4.4
+          interfaces:
+            eth0:
+              dhcp: true
+            eth1:
+              match: eth0
+              address: 192.168.27.2/24
+              gateway: 192.168.27.1
+              mtu: 1460
+              dhcp: false
+            eth2:
+              match: eth0
+              address: 192.168.27.3/24
+              gateway: 192.168.27.1
+              mtu: 1460
+              dhcp: false
+rancher:
+  state:
+    dev: LABEL=RANCHER_STATE
+  services_include:
+    ubuntu-console: true
+    open-vm-tools: true
+  network:
+    dns:
+      nameservers:
+        - 8.8.8.8
+        - 8.8.4.4
+    interfaces:
+      eth*: {}
+      lo:
+        address: 127.0.0.1/8
+      eth0:
+        dhcp: true
+      eth1:
+        match: eth0
+        address: 192.168.27.2/24
+        gateway: 192.168.27.1
+        mtu: 1460
+        dhcp: false
+      eth2:
+        match: eth0
+        address: 192.168.27.3/24
+        gateway: 192.168.27.1
+        mtu: 1460
+        dhcp: false

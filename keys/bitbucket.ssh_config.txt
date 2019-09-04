@@ -1,0 +1,4 @@
+Host           gitlab.org
+    Hostname        gitlab.org
+    IdentityFile    ~/.ssh/gitlab
+    IdentitiesOnly yes

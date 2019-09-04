@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+VAR_FILE_DEFAULT="settings/variables-centos-aws-online.json"
+VAR_FILE_OS_DEFAULT="settings/variables-centos-online.json"
+VAR_TEMPLATE_DEFAULT="templates/centos.json"
+VAR_BUILDER_DEFAULT="amazon-ebs"
+
+VAR_FILE="${1:-$VAR_FILE_DEFAULT}"
+VAR_FILE_OS="${2:-$VAR_FILE_OS_DEFAULT}"
+VAR_TEMPLATE="${3:-$VAR_TEMPLATE_DEFAULT}"
+VAR_BUILDER="${4:-$VAR_BUILDER_DEFAULT}"
+
+./packer build -only="${VAR_BUILDER}" -var-file="${VAR_FILE_OS}" -var-file="${VAR_FILE}" "${VAR_TEMPLATE}"

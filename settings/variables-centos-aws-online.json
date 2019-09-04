@@ -1,0 +1,9 @@
+{
+    "source_ami": "ami-24959b47",
+    "instance_type": "m4.large",
+    "vpc_id": "vpc-ca174baf",
+    "subnet_id": "subnet-f8eafb9d",
+    "ssh_username": "centos",
+    "ssh_private_key_file": "/home/ubuntu/.ssh/isodev-admin",
+    "ssh_keypair_name": "isodev-admin"
+}

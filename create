@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+#export PACKER_LOG=0
+
+TEMPLATE="${2:-template-centos-atomic-virtualbox.json}"
+
+echo "USING TEMPLATE: $TEMPLATE"
+
+# validates your packer template file
+./packer validate "$1" "$TEMPLATE"
+
+#export PACKER_LOG=0
+
+export BUILD_VERSION
+BUILD_VERSION="$(date +_%F_%H-%M-%S)"
+
+# take the template and actually run the builds within it, producing any resulting machine images.
+./packer build "$1" "$TEMPLATE"
+
+#export PACKER_LOG=0

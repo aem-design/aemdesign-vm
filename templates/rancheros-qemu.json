@@ -1,0 +1,54 @@
+{
+  "builders":
+  [
+    {
+      "type": "qemu",
+      "vm_name": "aemdesign-rancheros",
+      "iso_url": "file:///Users/max.barrass/Downloads/_install/rancheros.iso",
+      "iso_checksum": "0934d21882b385f5d623f59018252d75",
+      "iso_checksum_type": "md5",
+      "disk_size": 10000,
+      "format": "qcow2",
+      "headless": true,
+      "accelerator": "none",
+      "ssh_host_port_min": 2222,
+      "ssh_host_port_max": 2222,
+      "ssh_username": "rancher",
+      "ssh_password": "rancher",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "90m",
+      "output_directory": "builds/qemu",
+      "net_device": "virtio-net",
+      "disk_interface": "scsi",
+      "boot_wait": "5s",
+      "http_directory": "kickstart",
+      "qemuargs": [
+        ["-m", "1024"],
+        ["-smp", "4"],
+        ["-nographic"],
+        ["-display", "none"]
+      ],
+      "boot_command":
+      [
+        "<enter><wait>",
+        "sudo passwd rancher<enter><wait>",
+        "rancher<enter><wait>",
+        "rancher<enter><wait>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type":"file",
+      "source": "files/cloud_config.yml",
+      "destination": "/home/rancher/cloud_config.yml"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "ifconfig",
+        "sudo ros install -d /dev/sda -f -c /home/rancher/cloud_config.yml -i rancher/os:{{ user `ros_version` }} --no-reboot"
+      ]
+    }
+  ]
+}

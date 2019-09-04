@@ -1,0 +1,137 @@
+#!/usr/bin/env bash
+
+NOPASS=true
+PASS="$(pwd)/current/cert.password"
+
+echo "creating directories"
+mkdir -p ./current
+mkdir -p ./old
+
+
+function generateNewPassword() {
+
+    local NEWPASS
+    NEWPASS=$(openssl rand -base64 20)
+
+    echo -n "${NEWPASS}">./current/cert.password
+
+    echo "$NEWPASS"
+
+}
+
+function createRSAKey() {
+    KEYNAME=${1?need key name}
+
+
+
+if [ "$NOPASS" != "true" ]; then
+
+    echo "Creating Key"
+
+    ssh-keygen -t rsa -b 4096 -C "${KEYNAME}" -N "$(cat "${PASS}")" -f "./current/${KEYNAME}"
+
+    echo "Importing into Keystore"
+
+eval "$(ssh-agent)"
+pass=$(cat "$PASS")
+
+expect << EOF
+  spawn ssh-add ./current/${KEYNAME}
+  expect "Enter passphrase"
+  send "$pass\r"
+  expect eof
+EOF
+
+else
+
+    echo "Creating Key"
+
+    ssh-keygen -t rsa -b 4096 -C "${KEYNAME}" -N '' -f "./current/${KEYNAME}"
+
+    echo "Importing into Keystore"
+
+    eval "$(ssh-agent)"
+
+    ssh-add "./current/${KEYNAME}"
+
+fi
+
+}
+
+#copy current keys before rotation
+if [ -d "./current" ]; then
+
+    for file in current/*
+    do
+
+        extension="${file##*.}"
+        filename="${file%.*}"
+
+        if [[ "$filename" != "current/authorized_keys" && "$extension" != "pub" && "$extension" != "password" ]]; then
+            echo "REMOVING ${filename} from keychain"
+            SSHREMOVE=$(ssh-add -D "${filename}")
+            echo "REMOVING STATUS: ${SSHREMOVE}"
+        fi
+    done
+
+
+    BACKUP_FILE="./old/current-$(date +%Y%m%d_%H%M%S).tgz"
+
+    echo "backing up files into $BACKUP_FILE"
+
+    tar --preserve-permissions -cvf "$BACKUP_FILE" current/*
+
+    chmod -R 755 current
+    rm ./current/*
+fi
+
+echo "updating key permissions to allow ssh-keygen to work"
+
+chmod 400 old/*
+
+
+echo "======================================"
+echo "USING PASSWORD GENERATED"
+echo "======================================"
+
+if [ "$NOPASS" != "true" ]; then
+
+    generateNewPassword
+
+fi
+
+#generate new keys
+echo "GENERATE: aemdesign"
+createRSAKey "aemdesign"
+
+echo "GENERATE: github"
+createRSAKey "github"
+
+echo "GENERATE: gitlab"
+createRSAKey "gitlab"
+
+echo "GENERATE: devops"
+createRSAKey "devops"
+
+echo "GENERATE: jenkins"
+createRSAKey "jenkins"
+
+echo "GENERATE: docker"
+createRSAKey "docker"
+
+echo "GENERATE: deploy"
+createRSAKey "deploy"
+
+echo "GENERATE: esb"
+createRSAKey "esb"
+
+echo "GENERATE: nexus"
+createRSAKey "nexus"
+
+#create authorised keys
+echo "">./current/authorized_keys
+find . -type f -name '*.pub' -exec cat {} + >> ./current/authorized_keys
+
+chmod 400 current/*
+chmod 400 old/*
+

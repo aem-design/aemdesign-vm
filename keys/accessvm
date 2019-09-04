@@ -1,0 +1,2 @@
+#!/bin/bash
+ssh -i ./current/aemdesign aemdesign@192.168.27.2

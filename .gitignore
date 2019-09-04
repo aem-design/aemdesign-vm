@@ -1,0 +1,40 @@
+# Ignore VLT files
+.vlt
+.vlt-sync.log
+.vlt-sync-config.properties
+
+# Ignore compilation results
+target
+
+# Ignore IDE and Operating System artifacts
+.idea
+.classpath
+.metadata
+.project
+.settings
+maven-eclipse.xml
+*.iml
+*.ipr
+*.iws
+.DS_Store
+
+# Node
+content/node_modules
+node/
+node_modules
+npm-debug.log
+
+#Packer.io
+packer_cache
+builds
+sessions/*
+packer.io/packer-io.zip
+packer.io/bin
+http/iso
+
+#keys
+keys/current/
+#!keys/current/cert.password
+#!keys/current/authorized_keys
+#!keys/current/*.pub
+keys/old/

@@ -1,0 +1,2 @@
+#!/bin/bash
+ssh -C -vvv -o ControlMaster=no -o ControlPersist=60s -o 'IdentityFile="current/aemdesign"' -o KbdInteractiveAuthentication=no -o PreferredAuthentications=gssapi-with-mic,gssapi-keyex,hostbased,publickey -o PasswordAuthentication=no -o ConnectTimeout=10 -o ControlPath=~/.ansible/cp/ansible-ssh-%h-%p-%r aemdesign@192.168.27.2

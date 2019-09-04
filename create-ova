@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+VMX="${2:-}"
+
+if [ ! -f "$VMX" ]; then
+    echo "VMX source not found: $VMX"
+    return
+fi
+
+VMXDir=$(cd "$(/usr/bin/dirname "$VMX")" ; /bin/pwd)
+VMX="$VMXDir/$(basename "$VMX")"
+
+OVA="$VMXDir.ova"
+
+OVFTOOL="${1:-}"
+PATHOVFTOOL=$(cd "$(/usr/bin/dirname "$OVFTOOL")" ; /bin/pwd)
+INSTALL=false
+#DEBUG=true
+
+if [ -z "$OVFTOOL" ]; then
+        echo "OVFTool location was not specified, searching:"
+        echo " > find / -name \"ovftool\" -type f -perm -g+r,u+r,o+r -prune -print -quit 2>/dev/null | head -n 1"
+
+        OVFTOOL=$(find / -name "ovftool" -type f -perm -g+r,u+r,o+r -prune -print -quit 2>/dev/null | head -n 1)
+        PATHOVFTOOL=$(cd "$(/usr/bin/dirname "$OVFTOOL")" ; /bin/pwd)
+        if [ -n "$OVFTOOL" ]; then
+                echo "Found in:"
+                echo " > $PATHOVFTOOL"
+            else
+                echo "Not Found"
+        fi
+    else
+        echo "OVFTool was specified at location:"
+        echo " > $PATHOVFTOOL"
+        INSTALL=true
+fi
+
+if [ -z "$OVFTOOL" ]; then
+    echo "OVFTOOL not found or not specified, please install and try again."
+
+fi
+
+if [[ $INSTALL ]]; then
+
+    echo "Input VMX:"
+    echo " > $VMX"
+    echo "Output OVA:"
+    echo " > $OVA"
+
+    echo "Using OVATOOL to convert VMX to OVA:"
+    echo " > cd '$PATHOVFTOOL'; ./ovftool --acceptAllEulas --compress '$VMX' '$OVA'"
+    cd "$PATHOVFTOOL"
+#    echo "$(/bin/pwd)"
+    ./ovftool --acceptAllEulas --compress "$VMX" "$OVA"
+fi

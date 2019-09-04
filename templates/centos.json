@@ -1,0 +1,127 @@
+{
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_url": "{{user `iso_url`}}",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_password": "{{user `ssh_password`}}",
+      "boot_command": [
+        "<esc> linux text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `kickstart`}}<enter><wait>"
+      ],
+      "boot_wait": "4s",
+      "guest_os_type": "RedHat_64",
+      "disk_size": "{{user `disk_size`}}",
+      "vm_name": "{{user `vm_name`}}",
+      "output_directory": "{{user `output_directory`}}/{{user `vm_name`}}{{user `version`}}",
+      "shutdown_command": "sudo /usr/sbin/shutdown -P now",
+      "headless": true,
+      "http_directory": "kickstart",
+      "http_port_min": 10089,
+      "http_port_max": 10089,
+      "ssh_port": 22,
+      "ssh_wait_timeout": "90m",
+      "ssh_pty": "true",
+      "hard_drive_interface": "scsi",
+      "virtualbox_version_file": ".vbox_version",
+      "format": "ova",
+      "export_opts":
+      [
+        "--manifest",
+        "--vsys", "0",
+        "--product", "{{user `ova_product`}}",
+        "--producturl", "{{user `ova_producturl`}}",
+        "--vendor", "{{user `ova_vendor`}}",
+        "--vendorurl", "{{user `ova_vendorurl`}}",
+        "--description", "{{user `ova_description`}}",
+        "--version", "{{user `ova_version`}}"
+      ],
+      "vrdp_port_min": "{{user `vrdeport`}}",
+      "vrdp_port_max": "{{user `vrdeport`}}",
+      "vrdp_bind_address": "0.0.0.0",
+      "hard_drive_nonrotational": true,
+      "vboxmanage": [
+        ["modifyvm","{{.Name}}","--vrdeport","{{user `vrdeport`}}"],
+        ["modifyvm","{{.Name}}","--memory","{{user `memory`}}"],
+        ["storagectl","{{.Name}}","--name","SCSI Controller","--hostiocache", "on"],
+        ["modifyvm","{{.Name}}","--cpus","{{user `cpus`}}"],
+        ["modifyvm","{{.Name}}","--chipset", "ich9"],
+        ["modifyvm","{{.Name}}","--nic1","nat"],
+        ["modifyvm","{{.Name}}","--nic2","nat"],
+        ["modifyvm","{{.Name}}","--nic3","nat"],
+        ["modifyvm","{{.Name}}","--videocap","off"],
+        ["modifyvm","{{.Name}}","--videocapfile","{{template_dir}}/../sessions/{{user `vm_name`}}-{{timestamp}}.webm"],
+        ["createhd","disk","--format", "VDI","--size", "{{user `disk2_size`}}","--filename", "{{user `output_directory`}}/{{user `vm_name`}}/{{user `vm_name`}}-{{user `disk2_name`}}.vdi"],
+        ["storageattach", "{{.Name}}", "--storagectl", "SCSI Controller", "--port", "1", "--type", "hdd", "--medium", "{{user `output_directory`}}/{{user `vm_name`}}/{{user `vm_name`}}-{{user `disk2_name`}}.vdi" ]
+      ]
+    },
+    {
+      "type": "amazon-ebs",
+      "source_ami": "{{user `source_ami`}}",
+      "instance_type": "{{user `instance_type`}}",
+      "vpc_id": "{{user `vpc_id`}}",
+      "subnet_id": "{{user `subnet_id`}}",
+      "ssh_interface": "private_ip",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_private_key_file": "{{user `ssh_private_key_file`}}",
+      "ssh_keypair_name": "{{user `ssh_keypair_name`}}",
+      "ami_name": "aemdesign-{{timestamp | clean_ami_name}}"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "keys/current/",
+      "destination": "/tmp/"
+    },
+    {
+      "environment_vars": [
+        "NEWHOSTNAME={{user `hostname`}}",
+        "VM_NET1_IP={{user `VM_NET1_IP`}}",
+        "VM_NET1_GW={{user `VM_NET1_GW`}}",
+        "VM_NET1_DNS={{user `VM_NET1_DNS`}}",
+        "VM_NET1_ROUTE1={{user `VM_NET1_ROUTE1`}}",
+        "VM_NET1_ROUTE2={{user `VM_NET1_ROUTE2`}}",
+        "VM_NET2_IP={{user `VM_NET2_IP`}}",
+        "VM_NET2_GW={{user `VM_NET2_GW`}}",
+        "VM_NET2_DNS={{user `VM_NET2_DNS`}}",
+        "VM_NET2_ROUTE1={{user `VM_NET2_ROUTE1`}}",
+        "VM_NET2_ROUTE2={{user `VM_NET2_ROUTE2`}}"
+      ],
+      "type": "shell",
+      "execute_command": "echo '{{user `ssh_pass`}}' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
+      "scripts" : [
+        "scripts/centos/epel.sh",
+        "scripts/centos/python.sh",
+        "scripts/devops/extras.sh",
+        "scripts/devops/ansible.sh",
+        "scripts/devops/ntpd.sh",
+        "scripts/devops/firewall.sh",
+        "scripts/common/sshd.sh",
+        "scripts/centos/cleanup.sh"
+      ]
+    },
+    {
+      "environment_vars": [
+        "NEWHOSTNAME={{user `hostname`}}",
+        "VM_NET1_IP={{user `VM_NET1_IP`}}",
+        "VM_NET1_GW={{user `VM_NET1_GW`}}",
+        "VM_NET1_DNS={{user `VM_NET1_DNS`}}",
+        "VM_NET1_ROUTE1={{user `VM_NET1_ROUTE1`}}",
+        "VM_NET1_ROUTE2={{user `VM_NET1_ROUTE2`}}",
+        "VM_NET2_IP={{user `VM_NET2_IP`}}",
+        "VM_NET2_GW={{user `VM_NET2_GW`}}",
+        "VM_NET2_DNS={{user `VM_NET2_DNS`}}",
+        "VM_NET2_ROUTE1={{user `VM_NET2_ROUTE1`}}",
+        "VM_NET2_ROUTE2={{user `VM_NET2_ROUTE2`}}"
+      ],
+      "type": "shell",
+      "execute_command": "echo '{{user `ssh_pass`}}' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
+      "scripts" : [
+        "scripts/devops/netsetup.sh"
+      ],
+      "only": ["virtualbox-iso"]
+    }
+  ]
+}

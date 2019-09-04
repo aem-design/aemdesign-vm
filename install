@@ -1,0 +1,20 @@
+#!/bin/bash
+
+
+function lowercase() {
+    #echo "$1" | sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/"
+    echo "$1" | awk '{print tolower($0)}'
+}
+
+OS="$(lowercase "$(uname -a | grep Microsoft -q && echo windowsnt || uname)")"
+
+echo "OS=${OS}"
+if [[ "$OS" == "windowsnt" || "$OS" == *"mingw"* || "$OS" == *"cygwin"*  ]]; then
+
+    cd packer.io && ./install
+
+else
+    mvn clean install -Pdependencies
+fi
+
+

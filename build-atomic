@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+VAR_FILE_DEFAULT="settings/variables-centos-atomic-online.json"
+VAR_FILE="${1:-$VAR_FILE_DEFAULT}"
+VAR_TEMPLATE_DEFAULT="templates/centos-atomic-virtualbox.json"
+VAR_TEMPLATE="${2:-$VAR_TEMPLATE_DEFAULT}"
+
+#mvn verify -PverifyTemplate -PcreateVM -Dpacker.template=template-rancheros-virtualbox.json
+#mvn verify -PverifyTemplate -PcreateVM -Dpacker.template=tepmplate/rancheros-qemu.json
+#export PACKER_LOG=1
+
+./packer build -only=virtualbox-iso -var-file="${VAR_FILE}" "${VAR_TEMPLATE}"

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+export VAR_FILE_DEFAULT="settings/variables-centos-online.json"
+export VAR_FILE="${1:-$VAR_FILE_DEFAULT}"
+export VAR_TEMPLATE_DEFAULT="templates/centos-vbox.json"
+export VAR_TEMPLATE="${2:-$VAR_TEMPLATE_DEFAULT}"
+
+./packer build -only=aemdesign-vm -var-file="${VAR_FILE}" "${VAR_TEMPLATE}"

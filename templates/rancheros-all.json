@@ -1,0 +1,88 @@
+{
+  "variables": {
+    "iso_url": "file:///Users/max.barrass/Downloads/_install/rancheros-0.9.0rc2.iso",
+    "iso_checksum": "1221ec42b45623ab609e2555c0b4ae6f",
+    "iso_checksum_type": "md5",
+    "ssh_username": "rancher",
+    "ssh_password": "rancher"
+  },
+  "builders":[{
+    "type": "vmware-iso",
+    "guest_os_type": "linux",
+    "iso_checksum": "{{user `iso_checksum`}}",
+    "iso_checksum_type": "{{user `iso_checksum_type`}}",
+    "iso_url": "{{user `iso_url`}}",
+    "ssh_username": "{{user `ssh_username`}}",
+    "ssh_password": "{{user `ssh_password`}}",
+    "headless": false,
+    "boot_wait":"4s",
+    "ssh_wait_timeout": "30s",
+    "shutdown_command": "sudo shutdown -h now",
+    "disk_size":"8000",
+    "vmdk_name":"rancheros",
+    "vm_name":"racheros",
+    "vmx_data":{
+      "memsize":"1024",
+      "numvcpus":"1",
+      "cpuid.coresPerSocket":"2"
+    }
+  },{
+    "type": "qemu",
+    "iso_checksum": "{{user `iso_checksum`}}",
+    "iso_checksum_type": "{{user `iso_checksum_type`}}",
+    "iso_url": "{{user `iso_url`}}",
+    "ssh_username": "{{user `ssh_username`}}",
+    "ssh_password": "{{user `ssh_password`}}",
+    "headless": false,
+    "boot_wait":"4s",
+    "ssh_wait_timeout": "30s",
+    "shutdown_command": "sudo shutdown -h now",
+    "disk_size":"8000",
+    "disk_interface": "scsi",
+    "format":"raw",
+    "accelerator":"kvm",
+    "vm_name":"rancheros",
+    "qemuargs":[
+      ["-m","1024M"],
+      ["-cpu","host"],
+      ["-smp","2"]
+    ]
+  },{
+    "type": "virtualbox-iso",
+    "guest_os_type": "Linux_64",
+    "iso_checksum": "{{user `iso_checksum`}}",
+    "iso_checksum_type": "{{user `iso_checksum_type`}}",
+    "iso_url": "{{user `iso_url`}}",
+    "ssh_username": "{{user `ssh_username`}}",
+    "ssh_password": "{{user `ssh_password`}}",
+    "headless": false,
+    "boot_wait":"4s",
+    "ssh_wait_timeout": "30s",
+    "shutdown_command": "sudo shutdown -h now",
+    "disk_size":"8000",
+    "format":"ova",
+    "guest_additions_mode":"disable",
+    "vboxmanage": [
+      ["modifyvm", "{{.Name}}", "--memory", "1024"],
+      ["modifyvm", "{{.Name}}", "--cpus", "2"]
+    ]
+  }],
+  "provisioners":[{
+    "type":"file",
+    "source":"files/cloud_config.yml",
+    "destination":"/tmp/cloud_data.yml"
+  },{
+    "type":"shell",
+    "scripts":[
+      "scripts/disk_install.sh"
+    ]
+  }],
+  "post-processors": [{
+    "type": "vagrant",
+    "output": "vagrant_boxes/rancheros_{{ .Provider }}.box"
+  },{
+    "type":"compress",
+    "output": "output/rancheros.img.gz",
+    "only":["qemu"]
+  }]
+}
