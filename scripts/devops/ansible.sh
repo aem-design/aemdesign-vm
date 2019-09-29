@@ -56,8 +56,8 @@ echo "Pycurl status"
 python -c 'import pycurl; print(pycurl.version)'
 
 
-echo "Installing pyaem"
-pip install --no-deps https://github.com/wildone/pyaem/archive/master.zip
+echo "Installing pyaem2"
+pip install pyaem2
 
 echo "Curl status:"
 curl -V
@@ -65,5 +65,5 @@ curl -V
 echo "Pycurl status"
 python -c 'import pycurl; print(pycurl.version)'
 
-echo "PyAEM status"
-python -c 'import pyaem; print(pyaem.__version__)'
+echo "PyAEM2 status"
+python -c 'import pyaem2; print(pyaem2.__version__)'
