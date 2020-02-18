@@ -50,8 +50,8 @@
         ["modifyvm","{{.Name}}","--nic1","nat"],
         ["modifyvm","{{.Name}}","--nic2","nat"],
         ["modifyvm","{{.Name}}","--nic3","nat"],
-        ["modifyvm","{{.Name}}","--videocap","off"],
-        ["modifyvm","{{.Name}}","--videocapfile","{{template_dir}}/../sessions/{{user `vm_name`}}-{{timestamp}}.webm"],
+        ["modifyvm","{{.Name}}","--recording","off"],
+        ["modifyvm","{{.Name}}","--recordingfile","{{template_dir}}/../sessions/{{user `vm_name`}}-{{timestamp}}.webm"],
         ["createhd","disk","--format", "VDI","--size", "{{user `disk2_size`}}","--filename", "{{user `output_directory`}}/{{user `vm_name`}}/{{user `vm_name`}}-{{user `disk2_name`}}.vdi"],
         ["storageattach", "{{.Name}}", "--storagectl", "SCSI Controller", "--port", "1", "--type", "hdd", "--medium", "{{user `output_directory`}}/{{user `vm_name`}}/{{user `vm_name`}}-{{user `disk2_name`}}.vdi" ]
       ]
